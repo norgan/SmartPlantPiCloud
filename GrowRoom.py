@@ -257,7 +257,7 @@ def main():
         },
 		"Light": {
             "type": "numeric",
-            "bind": readVisLight()
+            "bind": readVisLight
         }
     }
 
