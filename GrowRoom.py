@@ -231,11 +231,11 @@ def main():
             "type": "numeric",
             "bind": readMoisture2
         },
-		"FullLight": {
+		"Full Spectrum Light": {
             "type": "numeric",
             "bind": readFullLight
         },
-		"IRLight": {
+		"Ifra-Red Light": {
             "type": "numeric",
             "bind": readIRLight
         }
