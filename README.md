@@ -1,5 +1,5 @@
 # SmartPlantPiCloud
-The goal of this project is to provide a plant monitoring solution with temperature, humidity, light levels and soil moisture sending metrics to the cloud. The project is written in Python and can run from a Raspberry Pi.
+The goal of this project is to provide a plant monitoring solution with temperature, humidity, light levels and soil moisture sending metrics to the cloud. The project is written in Python and can run from a Raspberry Pi. It also includes being able to take photos from the raspi camera for timelapse use. 
 
 This project leverages some or all of the following dependencies: 
 Cloud4RPI http://docs.cloud4rpi.io/start/rpi/ - Sends data to the cloud to be put into charts, guages etc
