@@ -136,16 +136,12 @@ def readHumidity():
         print "Error in humidity reading..."
         return -1
 
-def readVisLight():
+def readFullLight():
 	try:
 		# TSL2561 address, 0x39(57)
 		# Select control register, 0x00(00) with command register, 0x80(128)
 		#		0x03(03)	Power ON mode
 		bus.write_byte_data(0x39, 0x00 | 0x80, 0x03)
-		# TSL2561 address, 0x39(57)
-		# Select timing register, 0x01(01) with command register, 0x80(128)
-		#		0x02(02)	Nominal integration time = 402ms
-		bus.write_byte_data(0x39, 0x01 | 0x80, 0x02)
 
 		time.sleep(0.5)
 
@@ -153,30 +149,18 @@ def readVisLight():
 		# ch0 LSB, ch0 MSB
 		data = bus.read_i2c_block_data(0x39, 0x0C | 0x80, 2)
 
-		# Read data back from 0x0E(14) with command register, 0x80(128), 2 bytes
-		# ch1 LSB, ch1 MSB
-		data1 = bus.read_i2c_block_data(0x39, 0x0E | 0x80, 2)
-
 		# Convert the data
 		light = data[1] * 256 + data[0]
-		irlight = data1[1] * 256 + data1[0]
-		visible = light - irlight
 
 		# Output data to screen
 		print "Full Spectrum(IR + Visible) :%d lux" %light
-		print "Infrared Value :%d lux" %irlight
-		print "Visible Value :%d lux" %(light - irlight)
-		return visible
+		return light
 	except:
 		print "Error in light reading..."
         return -1
 		
-def readVisLight():
+def readIRLight():
 	try:
-		# TSL2561 address, 0x39(57)
-		# Select control register, 0x00(00) with command register, 0x80(128)
-		#		0x03(03)	Power ON mode
-		bus.write_byte_data(0x39, 0x00 | 0x80, 0x03)
 		# TSL2561 address, 0x39(57)
 		# Select timing register, 0x01(01) with command register, 0x80(128)
 		#		0x02(02)	Nominal integration time = 402ms
@@ -184,24 +168,16 @@ def readVisLight():
 
 		time.sleep(0.5)
 
-		# Read data back from 0x0C(12) with command register, 0x80(128), 2 bytes
-		# ch0 LSB, ch0 MSB
-		data = bus.read_i2c_block_data(0x39, 0x0C | 0x80, 2)
-
 		# Read data back from 0x0E(14) with command register, 0x80(128), 2 bytes
 		# ch1 LSB, ch1 MSB
 		data1 = bus.read_i2c_block_data(0x39, 0x0E | 0x80, 2)
 
 		# Convert the data
-		light = data[1] * 256 + data[0]
 		irlight = data1[1] * 256 + data1[0]
-		visible = light - irlight
-
+		
 		# Output data to screen
-		print "Full Spectrum(IR + Visible) :%d lux" %light
 		print "Infrared Value :%d lux" %irlight
-		print "Visible Value :%d lux" %(light - irlight)
-		return light
+		return irlight
 	except:
 		print "Error in light reading..."
         return -1
@@ -210,7 +186,7 @@ def readVisLight():
 
 def take_picture():
     try:
-        cmd = "raspistill -t 1 -o plant_monitor_" + \plant\photos\
+        cmd = "raspistill -t 1 -o plant_monitor_" + \
             str(time.strftime("%Y_%m_%d__%H_%M_%S"))+".jpg"
         process = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE)
         process.communicate()[0]
@@ -255,9 +231,13 @@ def main():
             "type": "numeric",
             "bind": readMoisture2
         },
-		"Light": {
+		"FullLight": {
             "type": "numeric",
-            "bind": readVisLight
+            "bind": readFullLight
+        },
+		"IRLight": {
+            "type": "numeric",
+            "bind": readIRLight
         }
     }
 
