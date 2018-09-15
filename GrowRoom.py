@@ -210,7 +210,7 @@ def readVisLight():
 
 def take_picture():
     try:
-        cmd = "raspistill -t 1 -o plant_monitor_" + \
+        cmd = "raspistill -t 1 -o plant_monitor_" + \plant\photos\
             str(time.strftime("%Y_%m_%d__%H_%M_%S"))+".jpg"
         process = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE)
         process.communicate()[0]
