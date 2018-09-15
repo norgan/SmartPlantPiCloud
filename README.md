@@ -10,3 +10,6 @@ The goal of this project is to provide a plant monitoring solution with temperat
 - You could also use a DHT11/22 for temp and hum, this is a very easy one to use and could be added quite simply. 
 
 We've attempted to make this as simple as possible by breaking up the sensor functions into methods. All you need to do is replace the sensor libraries and references to use any sensor. 
+
+### Note
+API Key is store in a file called config.py. A sample has been included called config.py.distro. Edit this file and enter your Cloud4RPI key then rename to config.py. 
