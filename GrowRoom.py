@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
-# GrovePi Project for a Plant monitoring project.
-#	*	Reads the data from moisture, light, temperature and humidity sensor
+#     GrovePi Project for a Plant monitoring project.
+#	*	Reads the data from moisture, light, temperature and humidity sensors
 #		and takes pictures from the Pi camera periodically and logs them
 #	*	Sensor Connections on the GrovePi:
 #			-> Grove Moisture sensor	- Port A0
@@ -10,50 +10,63 @@
 
 
 import time
-import grovepi
 import subprocess
 import math
+import sys
+import random
+
+# GrovePI Library
+import grovepi
+
+# I2C bus library
 import smbus
+
+# I2C Sensors
 import SI1145
 
 # Cloud4rpi
 from time import sleep
-import sys
-import random
 import cloud4rpi
+
+#Raspi metrics like CPU etc
 import rpi
 
 
-# analog sensor port number
+# analog sensor port number - set this to the analogue port on the grovepi that has your moisture sensor/s 0=1 and 1=2 etc
 mositure_sensor1 = 1
 mositure_sensor2 = 2
 
 # Get I2C bus
 bus = smbus.SMBus(1)
 
+#set sensor variable for the SL1145
 sensor = SI1145.SI1145()
 
+#Cloud4RPI auth Token
 DEVICE_TOKEN = 'AH1yEtV2hXzGPJSneShYQA85m'
 
 # Constants
-# LED_PIN = 12
+
 DATA_SENDING_INTERVAL = 15  # secs
 DIAG_SENDING_INTERVAL = 60  # secs
 POLL_INTERVAL = 0.5  # 500 ms
 
-#############
+#Timings#
+
 # test timings
 time_for_sensor = 15  # 4 seconds
 time_for_picture = 30  # 12 seconds
 
-#	final
+#	final uncomment for more production ready timing values
 # time_for_sensor		= 1*60*60	#1hr
 # time_for_picture		= 8*60*60	#8hr
 
 time_to_sleep = 10
+
+# Set Log file name
 log_file = "plant_monitor_log.csv"
 
-
+# Function to read analogue moisture sensor 1
 def readMoisture1():
     try:
         moisture1 = grovepi.analogRead(mositure_sensor1)
@@ -63,6 +76,7 @@ def readMoisture1():
         print "Error in moisture reading..."
         return -1
 
+#Function to read analogue moisture sensor 2 - Comment or remove these lines if you only want one or duplicate to add additional
 def readMoisture2():
     try:
         moisture2 = grovepi.analogRead(mositure_sensor2)
@@ -72,6 +86,7 @@ def readMoisture2():
         print "Error in moisture reading..."
         return -1
 
+# Function to read UV light from the Grove Sunlight Sensor
 def readUV():
     try:
         uv = sensor.readUV()
@@ -81,7 +96,7 @@ def readUV():
         print "Error in UV reading..."
         return -1
 
-
+# Function to read visible light from the Grove Sunlight Sensor
 def readVisible():
     try:
         vis = sensor.readVisible()
@@ -91,7 +106,7 @@ def readVisible():
         print "Error in Light Visible reading..."
         return -1
 
-
+# Function to read IR light from the Grove Sunlight Sensor
 def readIR():
     try:
         ir = sensor.readIR()
@@ -101,7 +116,7 @@ def readIR():
         print "Error in IR reading..."
         return -1
 
-
+# Function to read temperature from the Grove temp sensor
 def readTemperature():
     try:
         bus.write_i2c_block_data(0x44, 0x2C, [0x06])
@@ -119,7 +134,7 @@ def readTemperature():
         print "Error in temperature reading..."
         return -1
 
-
+# Function to read humidity from the Grove temp sensor
 def readHumidity():
     try:
         bus.write_i2c_block_data(0x44, 0x2C, [0x06])
@@ -135,7 +150,8 @@ def readHumidity():
     except:
         print "Error in humidity reading..."
         return -1
-
+		
+# Function to read full spectrum light reading from the Grove TSL2561 sensor
 def readFullLight():
 	try:
 		# TSL2561 address, 0x39(57)
@@ -158,7 +174,8 @@ def readFullLight():
 	except:
 		print "Error in light reading..."
         return -1
-		
+	
+# Function to read infrared light reading from the Grove TSL2561 sensor	
 def readIRLight():
 	try:
 		# TSL2561 address, 0x39(57)
@@ -181,9 +198,8 @@ def readIRLight():
 	except:
 		print "Error in light reading..."
         return -1
+
 # Take a picture with the current time using the Raspberry Pi camera. Save it in the same folder
-
-
 def take_picture():
     try:
         cmd = "raspistill -t 1 -o plant_monitor_" + \
@@ -194,7 +210,7 @@ def take_picture():
     except:
         print("Camera problem,please check the camera connections and settings")
 
-
+# Main Program
 def main():
     # Save the initial time, we will use this to find out when it is time to take a picture or save a reading
     last_read_sensor = last_pic_time = int(time.time())
@@ -241,6 +257,7 @@ def main():
         }
     }
 
+# Send diagnostic data to Cloud4RPI
     diagnostics = {
         'CPU Temp': rpi.cpu_temp,
         'IP Address': rpi.ip_address,
@@ -248,6 +265,7 @@ def main():
         'Operating System': rpi.os_name
     }
 
+# Cloud4RPI functions
     device = cloud4rpi.connect(DEVICE_TOKEN)
     device.declare(variables)
     device.declare_diag(diagnostics)
@@ -256,7 +274,7 @@ def main():
     while True:
         curr_time_sec = int(time.time())
 
-        # If it is time to take the sensor reading
+        # If it is time to take the sensor reading - based on time set at the top
         if curr_time_sec-last_read_sensor > time_for_sensor:
 
             device.publish_data()
@@ -264,7 +282,7 @@ def main():
             # Update the last read time
             last_read_sensor = curr_time_sec
 
-        # If it is time to take the picture
+        # If it is time to take the picture - based on time set at the top
         if curr_time_sec-last_pic_time > time_for_picture:
             take_picture()
             last_pic_time = curr_time_sec
