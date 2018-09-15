@@ -1,4 +1,4 @@
-# plant
+# SmartPlantPiCloud
 Raspi GrovePI Plant monitoring with temp/hum, light, uv, ir and soil moisture sending metrics to the cloud. 
 
 Dependencies: 
