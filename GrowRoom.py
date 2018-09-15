@@ -37,20 +37,20 @@ DEVICE_TOKEN = 'AH1yEtV2hXzGPJSneShYQA85m'
 
 # Constants
 # LED_PIN = 12
-DATA_SENDING_INTERVAL = 30  # secs
+DATA_SENDING_INTERVAL = 15  # secs
 DIAG_SENDING_INTERVAL = 60  # secs
 POLL_INTERVAL = 0.5  # 500 ms
 
 #############
 # test timings
-time_for_sensor = 4  # 4 seconds
-time_for_picture = 12  # 12 seconds
+time_for_sensor = 15  # 4 seconds
+time_for_picture = 30  # 12 seconds
 
 #	final
 # time_for_sensor		= 1*60*60	#1hr
 # time_for_picture		= 8*60*60	#8hr
 
-time_to_sleep = 15
+time_to_sleep = 10
 log_file = "plant_monitor_log.csv"
 
 
