@@ -209,7 +209,7 @@ def readIRLight():
 # Take a picture with the current time using the Raspberry Pi camera. Save it in the same folder
 def take_picture():
     try:
-        cmd = "raspistill -t 1 -o /plant/photos/plant_monitor_" + \
+        cmd = "raspistill -t 1 -o photos/plant_monitor_" + \
             str(time.strftime("%Y_%m_%d__%H_%M_%S"))+".jpg"
         process = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE)
         process.communicate()[0]
