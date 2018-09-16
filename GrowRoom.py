@@ -10,12 +10,14 @@
 
 
 import time
+import datetime
 import subprocess
 import math
 import sys
 import random
 import os
 import configparser
+from picamera import PiCamera
 
 #get config
 config = configparser.ConfigParser()
@@ -49,6 +51,9 @@ bus = smbus.SMBus(1)
 #set sensor variable for the SL1145
 sensor = SI1145.SI1145()
 
+#open the camera
+camera = PiCamera()
+
 #Cloud4RPI auth Token
 DEVICE_TOKEN = config['DEFAULT']['DEVICE_TOKEN']
 
@@ -61,8 +66,8 @@ POLL_INTERVAL = 0.5  # 500 ms
 #Timings#
 
 # test timings
-time_for_sensor = 15  # 4 seconds
-time_for_picture = 30  # 12 seconds
+time_for_sensor = 15  # in seconds
+time_for_picture = 30  # in seconds
 
 #	final uncomment for more production ready timing values
 # time_for_sensor		= 1*60*60	#1hr
@@ -208,14 +213,22 @@ def readIRLight():
 
 # Take a picture with the current time using the Raspberry Pi camera. Save it in the same folder
 def take_picture():
-    try:
-        cmd = "raspistill -t 1 -o photos/plant_monitor_" + \
-            str(time.strftime("%Y_%m_%d__%H_%M_%S"))+".jpg"
-        process = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE)
-        process.communicate()[0]
-        print("Picture taken\n------------>\n")
-    except:
-        print("Camera problem,please check the camera connections and settings")
+    #try:
+        #cmd = "raspistill -t 1 -o os.path.dirname(__file__)/photos/plant_monitor_" + \
+        #    str(time.strftime("%Y_%m_%d__%H_%M_%S"))+".jpg"
+        #process = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE)
+        #process.communicate()[0]
+        #print("Picture taken\n------------>\n")
+    #except:
+        #print("Camera problem,please check the camera connections and settings")
+	camera.resolution = (1024, 768)
+	camera.start_preview()
+	# Camera warm-up time
+	sleep(2)
+	date = datetime.datetime.now().strftime("%m_%d_%Y_%H_%M_%S")
+	camera.capture("photos/Plant"+ date +".jpg")
+	print('Captured Image')
+	camera.stop_preview
 
 # Main Program
 def main():
