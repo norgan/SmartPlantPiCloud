@@ -14,11 +14,12 @@ import subprocess
 import math
 import sys
 import random
-import ConfigParser
+import configparser
 
-#get config
-config = ConfigParser.ConfigParser()
-config.read('config.py')
+#get config - Camelcase for Python 3
+config = configparser.ConfigParser()
+#set the path of your config file here
+config.read('/plant/config.py')
 
 # GrovePI Library
 import grovepi
@@ -48,7 +49,7 @@ bus = smbus.SMBus(1)
 sensor = SI1145.SI1145()
 
 #Cloud4RPI auth Token
-DEVICE_TOKEN = config.get('DEFAULT', 'DEVICE_TOKEN')
+DEVICE_TOKEN = config['DEFAULT']['DEVICE_TOKEN']
 
 # Constants
 
