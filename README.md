@@ -11,6 +11,14 @@ The goal of this project is to provide a plant monitoring solution with temperat
 
 We've attempted to make this as simple as possible by breaking up the sensor functions into methods. All you need to do is replace the sensor libraries and references to use any sensor. 
 
+## Included Libraries
+- Python_SI1145
+- ADAFruit PureIO
+- I2C
+- Cloud4RPI
+
+You may need to install some of these before the script will work. Check the links above to find out how to do that.
+
 ### Setup and configuration
 - API Key is store in a file called config.py. A sample has been included called config.py.distro. Edit this file and enter your Cloud4RPI key then rename to config.py. 
 - Add the python script as a service using the cloud4rpi install_service script. 
