@@ -14,12 +14,13 @@ import subprocess
 import math
 import sys
 import random
+import os
 import configparser
 
-#get config - Camelcase for Python 3
+#get config
 config = configparser.ConfigParser()
 #set the path of your config file here
-config.read('/plant/config.py')
+config.read(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'config.py'))
 
 # GrovePI Library
 import grovepi
@@ -208,7 +209,7 @@ def readIRLight():
 # Take a picture with the current time using the Raspberry Pi camera. Save it in the same folder
 def take_picture():
     try:
-        cmd = "raspistill -t 1 -o plant_monitor_" + \
+        cmd = photos/"raspistill -t 1 -o plant_monitor_" + \
             str(time.strftime("%Y_%m_%d__%H_%M_%S"))+".jpg"
         process = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE)
         process.communicate()[0]
