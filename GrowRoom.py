@@ -226,7 +226,8 @@ def take_picture():
 	# Camera warm-up time
 	sleep(2)
 	date = datetime.datetime.now().strftime("%m_%d_%Y_%H_%M_%S")
-	camera.capture("photos/Plant"+ date +".jpg")
+	#camera.capture("photos/Plant"+ date +".jpg")
+	camera.capture(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'photos', 'Plant' + date + '.jpg'))
 	print('Captured Image')
 	camera.stop_preview
 
