@@ -19,7 +19,7 @@ We've attempted to make this as simple as possible by breaking up the sensor fun
 
 You may need to install some of these before the script will work. Check the links above to find out how to do that.
 
-### Setup and configuration
+## Setup and configuration
 - API Key is store in a file called config.py. A sample has been included called config.py.distro. Edit this file and enter your Cloud4RPI key then rename to config.py. 
 - Add the python script as a service using the cloud4rpi install_service script. 
 - Be sure to remark out the sensor stuff you're not using
