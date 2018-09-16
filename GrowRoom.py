@@ -14,10 +14,10 @@ import subprocess
 import math
 import sys
 import random
-import configparser
+import ConfigParser
 
 #get config
-config = configparser.ConfigParser()
+config = ConfigParser.ConfigParser()
 config.read('config.py')
 
 # GrovePI Library
@@ -48,7 +48,7 @@ bus = smbus.SMBus(1)
 sensor = SI1145.SI1145()
 
 #Cloud4RPI auth Token
-DEVICE_TOKEN = config['DEFAULT']['DEVICE_TOKEN']
+DEVICE_TOKEN = config.get('DEFAULT', 'DEVICE_TOKEN')
 
 # Constants
 
